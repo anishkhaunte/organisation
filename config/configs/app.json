@@ -1,0 +1,13 @@
+{
+    "override" : {
+        "default" : "./config/deployment.json"
+    },
+    "baseurl": {
+        "doc": "database hostname",
+        "default": "localhost",
+        "env" : "BASE_URL"
+    },
+    "apiProtocol": "http",
+    "port": 5000,
+    "cors":true
+}

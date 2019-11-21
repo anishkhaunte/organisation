@@ -1,0 +1,11 @@
+node_modules/
+config/deployment.json
+jenkins-test-results.xml
+.nyc_output/
+coverage/
+.jshintrc
+.vscode/
+.vscode/launch.json
+**/app.tar.gz
+# Below folder is for jetbrains IDE hence git ignored.
+.idea/

@@ -1,0 +1,64 @@
+{
+  "name": "organization",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "api": "node index.js",
+    "lint": "eslint .",
+    "lintfix": "eslint . --fix",
+    "test": "mocha --timeout 10000 --exit",
+    "coverage": "nyc --reporter=html --reporter=text mocha --timeout 10000 --exit"
+  },
+  "dependencies": {
+    "ajv": "^6.6.2",
+    "ajv-errors": "^1.0.1",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.3",
+    "convict": "^4.0.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-basic-auth": "^1.2.0",
+    "fs": "0.0.1-security",
+    "generate-password": "^1.4.1",
+    "helmet": "^3.13.0",
+    "https-proxy-agent": "^2.2.1",
+    "jsonschema": "^1.2.4",
+    "jsonwebtoken": "^8.2.1",
+    "jwt-simple": "^0.5.6",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.1",
+    "moment-timezone": "^0.5.23",
+    "morgan": "^1.9.0",
+    "multer": "^1.4.1",
+    "sequelize": "5.13.1",
+    "pg": "7.12.1",
+    "promise-retry": "^1.1.1",
+    "querystring": "^0.2.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.4",
+    "string-template": "^1.0.0",
+    "uuid": "^3.2.1",
+    "verror": "^1.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "eslint": "^5.6.0",
+    "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.18.0",
+    "nyc": "^14.1.0"
+  },
+  "nyc": {
+    "all": true,
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "exclude": [
+      "coverage/**/*.js",
+      "test/**/*.js",
+      "api/public/**/*"
+    ]
+  }
+}

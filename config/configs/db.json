@@ -1,0 +1,48 @@
+{
+
+    "host": {
+        "doc": "database hostname",
+        "default": "localhost",
+        "env" : "MONGODB_HOST"
+    },
+    "port": {
+        "doc": "database port",
+        "format": "int",
+        "default": 5432
+
+    },
+    "database": {
+        "default": "postgres"
+    },
+    "hosts": ["localhost", "localhost","localhost"],
+    "ports": [5432, 5432, 5432],
+    "replName": {
+        "default": "rs0"
+    },
+    "writeconcern": {
+        "doc": "the write concern for the connection",
+        "default": 1
+
+    },
+    "maxTimeMS": 5000,
+    "authEnabled": {
+        "default": true
+    },
+    "userName": {
+        "default": "postgres"
+    },
+    "password": {
+        "default": "admin"
+    },
+    "authSource": {
+        "default": ""
+    },
+    "pagination": {
+        "offset": 0,
+        "limit": 100,
+        "list": {
+            "offset": 0,
+            "limit": 100
+        }
+    }
+}

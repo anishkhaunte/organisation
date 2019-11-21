@@ -1,0 +1,8 @@
+{
+    "ignorelist":{
+        "equals": [
+            "/api/refreshtoken"
+        ],
+        "startswith":["/s/"]
+    }
+}

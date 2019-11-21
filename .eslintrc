@@ -1,0 +1,46 @@
+{
+    "env": {
+        "node": true,
+        "mocha": true,
+        "browser": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "warn",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": 0,
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-mixed-spaces-and-tabs":[
+            "error",
+            "smart-tabs"
+        ],
+        "no-unused-vars":[
+            "warn"
+        ],
+        "no-console": "off"
+    },
+
+    "globals":{
+        "config":true,
+        "sender":true,
+        "memstore":true,
+        "redis":true,
+        "appGlobals":true,
+        "APPURL":true,
+        "WSURL":true
+    }
+}
