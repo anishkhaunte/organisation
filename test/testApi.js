@@ -48,6 +48,19 @@ describe('normal', function() {
             });
     });
 
+    it('it should return 0 organizations', (done) => {
+        let queryParams = {offset:0, organization_id: 500};
+        chai.request(server)
+        .get('/api/organization?'+'offset='+ queryParams.offset+'&organization_id='+queryParams.organization_id)
+        .end((err, res) => {
+              res.should.have.status(200);
+              res.body.totalCount.should.be.eql(0);
+              res.body.moreAvailable.should.be.eql(false);
+              res.body.organizations.should.be.eql([]);
+          done();
+        });
+    });
+
     it('it should GET all the organizations', (done) => {
         let queryParams = {offset:0, organization_id: 3};
         chai.request(server)
