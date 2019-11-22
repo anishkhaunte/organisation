@@ -1,5 +1,5 @@
 'use strict';
-var debug = require('debug')("VCService : ");
+var debug = require('debug')("OrganizationService : ");
 var BaseService = require('./BaseService.js');
 var Promise = require('bluebird');
 var _ = require('lodash');
