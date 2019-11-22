@@ -107,6 +107,7 @@ OrganizationService.prototype.getOrganizationTree = function(queryParams){
     }); 
     return Promise.join(parentsP, siblingsP, kidsP).spread((parentsInfo, siblingsInfo, kidsInfo)=>{
         let all = [];
+
         if(parentsInfo.length>0)
             parentsInfo.forEach(parentObj=>{
                 parentObj.parents.relationship_type = 'parent';
@@ -132,12 +133,13 @@ OrganizationService.prototype.getOrganizationTree = function(queryParams){
             if (orgNameA > orgNameB) return 1;
             return 0;
         });
-        // return Promise.resolve(all);
+
+        let totalCount = _.size(all);
         let moreAvailable = (offset + limit) < (all.length) ? true : false;
         let paginatedOrganizations = all.splice(offset, limit+1);
 
         return {
-            totalCount:_.size(all),
+            totalCount: totalCount,
             moreAvailable: moreAvailable,
             organizations: paginatedOrganizations 
         };
