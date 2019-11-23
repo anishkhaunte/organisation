@@ -61,7 +61,12 @@ OrganizationService.prototype.getOrganizationTree = function (queryParams) {
     var organizationNameP = organizationDbModels.findOne({ where: { 'name': queryParams.organization_name } });
 
     return organizationNameP.then((orgInfo) => { 
-
+        if(!orgInfo)
+            return Promise.reject({
+                'customCode': 400,
+                'message': "BADREQUEST",
+                'errors': "Organization tree not found."
+            });
         var parentsP = relationDbModel.findAll({
             where: { organization_id: orgInfo._id },
             attributes: ['organization_id'],
