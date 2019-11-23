@@ -58,7 +58,7 @@ OrganizationService.prototype.getOrganizationTree = function (queryParams) {
     var limit = parseInt(queryParams.limit) || parseInt(pagination.limit);
     var relationDbModel = Model.getModelInstance(relationModelName);
     var organizationDbModels = Model.getModelInstance(organizationModelName);
-    var organizationNameP = organizationDbModels.findOne({ where: { 'name': queryParams.organization_name } });
+    var organizationNameP = organizationDbModels.findOne({ where: { 'name': { [Op.iLike]: queryParams.organization_name } } });
 
     return organizationNameP.then((orgInfo) => { 
         if(!orgInfo)
