@@ -107,11 +107,6 @@ class DBManager {
         return this.connection.model(modelName);
     }
 
-    /*getConnHealth() {
-        return sequelize.connections.map((conn) => {
-            return conn.readyState;
-        });
-    }*/
 }
 
 module.exports = DBManager;
