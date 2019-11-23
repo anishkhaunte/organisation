@@ -1,6 +1,10 @@
 # organisation
 
 
+* Language : Nodejs
+* Database: Postgres
+* Containerization : Docker
+
 ## Installation guide:
 * Install node (for npm)
 * Install postgres
