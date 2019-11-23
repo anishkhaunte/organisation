@@ -36,6 +36,13 @@ class BaseModel{
                 return model.findAll(query);
             });
     }
+
+    findOne(query){
+        return this.getModel(this.modelName)
+            .then((model) => {
+                return model.findOne(query);
+            });
+    }
     
 }
 module.exports = BaseModel;
