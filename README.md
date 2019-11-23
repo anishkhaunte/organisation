@@ -11,6 +11,7 @@
 
 ## Running the tests
 - ```npm test```
+Note: Uses a separate test db and its truncated each time it runs
 
 
 
@@ -34,6 +35,7 @@ Use ```docker-compose down``` to stop the process
 * ```deployment.json``` which overides environment specific configuration when needed
 * The endpoints are defined in the rest files and the service layer code is served by the files in services folder
 * The Database related schema and models are defined on the ```db``` folder. Querys are defined in the BaesModel Class.
+* The POST method recursively adds organisations and maintains its children, parents and sisters.
 * The GET organisation response has moreAvailable property which tells us whether more paginated items needed to be fetch on the client or not
 * The docker-compose file uses the local network and hence the local db running on the machine
 
