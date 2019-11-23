@@ -53,18 +53,17 @@ describe('normal', function() {
         chai.request(server)
         .get('/api/organization?'+'offset='+ queryParams.offset+'&organization_id='+queryParams.organization_id)
         .end((err, res) => {
-              res.should.have.status(200);
-              res.body.totalCount.should.be.eql(0);
-              res.body.moreAvailable.should.be.eql(false);
-              res.body.organizations.should.be.eql([]);
+              res.should.have.status(400);
+              res.body.message.should.be.eql("BADREQUEST");
+              res.body.errors.should.be.eql("Organization tree not found.");
           done();
         });
     });
 
     it('it should GET all the organizations', (done) => {
-        let queryParams = {offset:0, organization_id: 3};
+        let queryParams = {offset:0, organization_name: 'Test Banana tree'};
         chai.request(server)
-        .get('/api/organization?'+'offset='+ queryParams.offset+'&organization_id='+queryParams.organization_id)
+        .get('/api/organization?'+'offset='+ queryParams.offset+'&organization_name='+queryParams.organization_name)
         .end((err, res) => {
               res.should.have.status(200);
               res.body.should.have.property('totalCount');
