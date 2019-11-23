@@ -30,7 +30,6 @@ function loadSchema(Sequelize,DataTypes){
         }
     };
     Sequelize.define('Organizations',organization,{freezeTableName:true, timestamps:false, underscored:true});
-    //Organization.belongsTo(Sequelize.models.Organizations, {targetKey:'_id',foreignKey: 'organization_id'});
     
 }
 module.exports = loadSchema;

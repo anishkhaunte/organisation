@@ -32,15 +32,10 @@ function loadSchema(Sequelize,DataTypes){
         }
     };
     var Relation = Sequelize.define('Relations',relation,{freezeTableName:true, timestamps:false, underscored:true});
-//    Relation.belongsTo(Sequelize.models.Organizations,{as:'organization'});
-//    Relation.belongsTo(Sequelize.models.Organizations,{as:'parent'});
-    //Relation.hasMany(Sequelize.models.Organizations,{as:'organization'});
-    //Relation.hasMany(Sequelize.models.Organizations,{as:'parent'});
     
     Relation.hasMany(Sequelize.models.Relations,{as: 'parents',foreignKey:'organization_id', sourceKey:'parent_id',constraints: false});
     Relation.hasMany(Sequelize.models.Relations,{as: 'kids',foreignKey:'parent_id', sourceKey:'organization_id', constraints: false});    
     Relation.hasMany(Sequelize.models.Relations,{as: 'siblings',foreignKey:'parent_id', sourceKey:'organization_id', constraints: false});    
-    //Relation.hasMany(Sequelize.models.Relations,{foreignKey:'parent'});
 
 }
 module.exports = loadSchema;
