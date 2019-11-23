@@ -96,15 +96,5 @@ describe('normal', function() {
               done();
           });
     });
-    /*it('sync_time /api/sync_time get', function(done) {
-        chai.request(server)
-            .get('/api/sync_time')
-            .end(function(err, res){
-                res.should.have.status(200);
-                res.body.should.be.a('array');
-                done();
-            });
-    });*/
-
 
 });
