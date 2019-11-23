@@ -2,17 +2,14 @@
 var fs        = require('fs'),
     path      = require('path'),
     _         = require("lodash"),
-    Validator = require('jsonschema').Validator,
     debug     = require("debug")("Validator");
     allmodels = {};
     custValidator = require('./customvalidator.js');
 
 //	@moduleextend Validator ( module conformant )
-var extendValidatorAttributes = require('./extendvalidatoratrributes.js').extend_attributes;
 
 //	@moduleextend Validator
 //	extends Validator.prototype.types ( module non-conformant )
-require("./customtypes.js")(Validator);
 var AJV        = require("ajv");
 var ajv        = new AJV({allErrors:true, jsonPointers: true});
 require('ajv-errors')(ajv);
@@ -71,29 +68,6 @@ function validator(value, schema) {
     } else {
         return ajv.validate(modelSchema, value);
     }
-}
-
-function validator1(value, schema) {
-    var v = new Validator();
-    extendValidatorAttributes(v);
-    var modelSchema = allmodels[schema];
-
-    function importNextSchema() {
-        var nextSchema = v.unresolvedRefs.shift();
-        if (nextSchema) {
-            var model = allmodels[nextSchema.replace('/', '')];
-            v.addSchema(model, '/' + model.id);
-            importNextSchema();
-        }
-    }
-
-    if (modelSchema) {
-        v.addSchema(modelSchema);
-        importNextSchema();
-    } else {
-        modelSchema = schema;
-    }
-    return v.validate(value, modelSchema);
 }
 
 function getParamSchemaAndValue(req, param) {
