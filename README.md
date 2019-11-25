@@ -9,6 +9,7 @@
 * Install node (for npm)
 * Install postgres
 * Create two db named ```postgres``` and another ```test``` running on port ```5432``` with ```username: postgres``` & ```password: admin```
+* Allow  ```listen_addresses = '*'``` inside postgresql.conf file and restart the postgres service. (Only for development)
 * Install docker & docker-compose
 
 
