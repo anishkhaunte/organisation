@@ -49,3 +49,5 @@ Use ```docker-compose down``` to stop the process
 * Import the post data and push it to a queue (Rabbitmq) and process it later.
 * Introduce Node clustering.
 
+![Architecture](diagram.jpj)
+
