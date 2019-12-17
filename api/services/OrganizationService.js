@@ -32,7 +32,7 @@ function processChildren(item, ret, parentId) {
     });
 }
 
-OrganizationService.prototype.createOrganizationTree = function (payload) {
+OrganizationService.prototype.createOrganizationTree = (payload) => {
     var organizationDbModels = Model.getModelInstance(organizationModelName);
     var self = this;
     var all = [];
@@ -52,7 +52,7 @@ OrganizationService.prototype.createOrganizationTree = function (payload) {
 
 };
 
-OrganizationService.prototype.getOrganizationTree = function (queryParams) {
+OrganizationService.prototype.getOrganizationTree = (queryParams)=> {
     const Op = Sequelize.Op;
     var offset = parseInt(queryParams.offset) || parseInt(pagination.offset);
     var limit = parseInt(queryParams.limit) || parseInt(pagination.limit);
@@ -140,7 +140,7 @@ OrganizationService.prototype.getOrganizationTree = function (queryParams) {
                 all.push(siblingObj.parents.siblings);
             });
 
-        all.sort(function (orgObj1, orgObj2) {
+        all.sort((orgObj1, orgObj2) => {
             var orgNameA = orgObj1.organization_name.toUpperCase();
             var orgNameB = orgObj2.organization_name.toUpperCase();
             if (orgNameA < orgNameB) return -1;
@@ -162,7 +162,7 @@ OrganizationService.prototype.getOrganizationTree = function (queryParams) {
 
 
 module.exports = {
-    getInst: function () {
+    getInst:  ()=> {
         return new OrganizationService();
     }
 };
