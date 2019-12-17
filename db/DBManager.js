@@ -18,7 +18,7 @@ class DBManager {
     }
 
     prepareDBURL(){
-        var db = config.get("db");
+        let db = config.get("db");
         //in case want to run it against testcase see bootstrap.js
         if(this.config.dbName) db.database = this.config.dbName;
         return connString(db);
@@ -40,7 +40,7 @@ class DBManager {
     }
 
     loadSchemas(){
-        var files;
+        let files;
 
         this.debug('loading schemas');
         files = fs.readdirSync(path.resolve(__dirname, './schemas'));
@@ -60,7 +60,7 @@ class DBManager {
 
     syncing(){
         return new Promise((resolve, reject) => {
-            var options = {};
+            let options = {};
             this.config.dbName === 'test' ? options.force = true: options.force = false;
             this.sequelize.sync(options).then(()=> resolve());
         });
@@ -88,8 +88,8 @@ class DBManager {
     }
 
     createConnection(cb){
-        var dbURL = this.prepareDBURL();
-        var operatorsAliases = this.setOperatorAliases();
+        let dbURL = this.prepareDBURL();
+        let operatorsAliases = this.setOperatorAliases();
         //DBname, username, password, options
         //this.sequelize =  new Sequelize("postgres", "postgres", "admin",{host:"localhost", dialect: "postgres",define: { "createdAt": "createdat","updatedAt": "updatedat"}, operatorAliases: operatorsAliases} );
         //this.sequelize =  new Sequelize('postgres://postgres:admin@db:5432/postgres' );

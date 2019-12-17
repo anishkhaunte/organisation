@@ -13,7 +13,7 @@ module.exports.getModelInstance = function(name){
 function addAllListeners(path, loadFilesInRoot, dbMgr) {
     loadFilesInRoot = (typeof loadFilesInRoot === 'undefined') ? true : loadFilesInRoot;
 
-    var files;
+    let files;
 
     files = fs.readdirSync(path);
 
@@ -36,6 +36,6 @@ function addAllListeners(path, loadFilesInRoot, dbMgr) {
 
 
 module.exports.init  = function(dbMgr){
-    var path = __dirname;
+    let path = __dirname;
     addAllListeners(path, true, dbMgr);
 };
