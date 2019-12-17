@@ -16,20 +16,18 @@ function OrganizationService() {
 }
 
 
-function processChildren(item, ret, parentId) {
-    var organizationDbModels = Model.getModelInstance(organizationModelName);
-    var relationDbModels = Model.getModelInstance(relationModelName);
-    return Promise.map(item, (currDaughter) => {
+async function processChildren (item, ret, parentId) {
+    let organizationDbModels = Model.getModelInstance(organizationModelName);
+    let relationDbModels = Model.getModelInstance(relationModelName);
+    let allTree = await Promise.map(item, async (currDaughter) => {
         let daughter_org_name = currDaughter.org_name;
-        let createOrgP = organizationDbModels.create({ 'name': daughter_org_name });
-        return createOrgP.then((organization) => {
-            return relationDbModels.create({ 'organization_id': organization._id, 'organization_name': organization.name, 'parent_id': parentId }).then(() => {
-                if ("daughters" in currDaughter && currDaughter.daughters.length > 0) {
-                    processChildren(currDaughter.daughters, ret, organization._id);
-                }
-            });
-        });
+        let organization = await (organizationDbModels.create({ 'name': daughter_org_name }));
+        let relation = await (relationDbModels.create({ 'organization_id': organization._id, 'organization_name': organization.name, 'parent_id': parentId }));
+        if ("daughters" in currDaughter && currDaughter.daughters.length > 0) {
+            processChildren(currDaughter.daughters, ret, organization._id);
+        }
     });
+    return allTree;
 }
 
 OrganizationService.prototype.createOrganizationTree = (payload) => {
