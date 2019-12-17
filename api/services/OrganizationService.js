@@ -30,24 +30,21 @@ async function processChildren (item, ret, parentId) {
     return allTree;
 }
 
-OrganizationService.prototype.createOrganizationTree = (payload) => {
+OrganizationService.prototype.createOrganizationTree = async (payload) => {
     var organizationDbModels = Model.getModelInstance(organizationModelName);
     var self = this;
     var all = [];
     let organization_data = {
         name: payload.org_name
     };
-    return organizationDbModels.create(organization_data).then((organization) => {
-        if (payload.daughters.length > 0)
-            return Promise.all([processChildren.call(self, payload.daughters, all, organization._id)]); //TODO: work on response
-        else return organization;
-    }).then(() => {
-        return Promise.resolve({
-            'customCode': 200,
-            'status': 'Organization tree created successfully'
-        });
+    let organization = await (organizationDbModels.create(organization_data));
+    if (payload.daughters.length > 0)
+        await Promise.all([processChildren.call(self, payload.daughters, all, organization._id)]); //TODO: work on response
+    
+    return Promise.resolve({
+        'customCode': 200,
+        'status': 'Organization tree created successfully'
     });
-
 };
 
 OrganizationService.prototype.getOrganizationTree = async (queryParams)=> {
