@@ -58,106 +58,104 @@ OrganizationService.prototype.getOrganizationTree = async (queryParams)=> {
     var limit = parseInt(queryParams.limit) || parseInt(pagination.limit);
     var relationDbModel = Model.getModelInstance(relationModelName);
     var organizationDbModels = Model.getModelInstance(organizationModelName);
-    var organizationNameP = organizationDbModels.findOne({ where: { 'name': { [Op.iLike]: queryParams.organization_name } } });
+    var orgInfo = await (organizationDbModels.findOne({ where: { 'name': { [Op.iLike]: queryParams.organization_name } } }));
 
-    return organizationNameP.then((orgInfo) => { 
-        if(!orgInfo)
-            return Promise.reject({
-                'customCode': 400,
-                'message': "BADREQUEST",
-                'errors': "Organization tree not found."
-            });
-        var parentsP = relationDbModel.findAll({
-            where: { organization_id: orgInfo._id },
-            attributes: ['organization_id'],
+    if(!orgInfo)
+        return Promise.reject({
+            'customCode': 400,
+            'message': "BADREQUEST",
+            'errors': "Organization tree not found."
+        });
+
+    var parentsInfo = await (relationDbModel.findAll({
+        where: { organization_id: orgInfo._id },
+        attributes: ['organization_id'],
+        include: [{
+            model: relationDbModel.dbMgr.sequelize.models.Relations,
+            as: 'parents',
+            attributes: ['organization_name'],
+            required: true
+        }],
+        raw: true,
+        nest: true
+    }));
+
+    var siblingsInfo = await (relationDbModel.findAll({
+        where: {
+            [Op.and]: [
+                { organization_id: orgInfo._id },
+                { '$parents->siblings.organization_id$': { [Op.ne]: orgInfo._id } }
+            ]
+        },
+        attributes: ['organization_id'],
+        include: [{
+            model: relationDbModel.dbMgr.sequelize.models.Relations,
+            as: 'parents',
+            attributes: ['organization_name'],
+            required: true,
             include: [{
                 model: relationDbModel.dbMgr.sequelize.models.Relations,
-                as: 'parents',
+                as: 'siblings',
                 attributes: ['organization_name'],
                 required: true
             }],
             raw: true,
             nest: true
+        }],
+        raw: true,
+        nest: true
+    }));
+
+    var kidsInfo = await (relationDbModel.findAll({
+        where: { organization_id: orgInfo._id },
+        attributes: ['organization_id'],
+        include: [{
+            model: relationDbModel.dbMgr.sequelize.models.Relations,
+            as: 'kids',
+            attributes: ['organization_name'],
+            required: true
+        }],
+        raw: true,
+        nest: true
+    }));
+
+    let all = [];
+
+    if (parentsInfo.length > 0)
+        parentsInfo.forEach(parentObj => {
+            parentObj.parents.relationship_type = 'parent';
+            all.push(parentObj.parents);
         });
 
-        var siblingsP = relationDbModel.findAll({
-            where: {
-                [Op.and]: [
-                    { organization_id: orgInfo._id },
-                    { '$parents->siblings.organization_id$': { [Op.ne]: orgInfo._id } }
-                ]
-            },
-            attributes: ['organization_id'],
-            include: [{
-                model: relationDbModel.dbMgr.sequelize.models.Relations,
-                as: 'parents',
-                attributes: ['organization_name'],
-                required: true,
-                include: [{
-                    model: relationDbModel.dbMgr.sequelize.models.Relations,
-                    as: 'siblings',
-                    attributes: ['organization_name'],
-                    required: true
-                }],
-                raw: true,
-                nest: true
-            }],
-            raw: true,
-            nest: true
+    if (kidsInfo.length > 0)
+        kidsInfo.forEach(kidObj => {
+            kidObj.kids.relationship_type = 'kids';
+            all.push(kidObj.kids);
         });
 
-        var kidsP = relationDbModel.findAll({
-            where: { organization_id: orgInfo._id },
-            attributes: ['organization_id'],
-            include: [{
-                model: relationDbModel.dbMgr.sequelize.models.Relations,
-                as: 'kids',
-                attributes: ['organization_name'],
-                required: true
-            }],
-            raw: true,
-            nest: true
-        });
-        return Promise.join(parentsP, siblingsP, kidsP)
-    }).spread((parentsInfo, siblingsInfo, kidsInfo) => {
-        let all = [];
-
-        if (parentsInfo.length > 0)
-            parentsInfo.forEach(parentObj => {
-                parentObj.parents.relationship_type = 'parent';
-                all.push(parentObj.parents);
-            });
-
-        if (kidsInfo.length > 0)
-            kidsInfo.forEach(kidObj => {
-                kidObj.kids.relationship_type = 'kids';
-                all.push(kidObj.kids);
-            });
-
-        if (siblingsInfo.length > 0)
-            siblingsInfo.map((siblingObj) => {
-                siblingObj.parents.siblings.relationship_type = 'sister';
-                all.push(siblingObj.parents.siblings);
-            });
-
-        all.sort((orgObj1, orgObj2) => {
-            var orgNameA = orgObj1.organization_name.toUpperCase();
-            var orgNameB = orgObj2.organization_name.toUpperCase();
-            if (orgNameA < orgNameB) return -1;
-            if (orgNameA > orgNameB) return 1;
-            return 0;
+    if (siblingsInfo.length > 0)
+        siblingsInfo.map((siblingObj) => {
+            siblingObj.parents.siblings.relationship_type = 'sister';
+            all.push(siblingObj.parents.siblings);
         });
 
-        let totalCount = _.size(all);
-        let moreAvailable = (offset + limit) < (all.length) ? true : false;
-        let paginatedOrganizations = all.splice(offset, limit + 1);
-
-        return {
-            totalCount: totalCount,
-            moreAvailable: moreAvailable,
-            organizations: paginatedOrganizations
-        };
+    all.sort((orgObj1, orgObj2) => {
+        var orgNameA = orgObj1.organization_name.toUpperCase();
+        var orgNameB = orgObj2.organization_name.toUpperCase();
+        if (orgNameA < orgNameB) return -1;
+        if (orgNameA > orgNameB) return 1;
+        return 0;
     });
+
+    let totalCount = _.size(all);
+    let moreAvailable = (offset + limit) < (all.length) ? true : false;
+    let paginatedOrganizations = all.splice(offset, limit + 1);
+
+    return {
+        totalCount: totalCount,
+        moreAvailable: moreAvailable,
+        organizations: paginatedOrganizations
+    };
 };
 
 
