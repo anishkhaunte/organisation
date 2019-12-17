@@ -52,7 +52,7 @@ OrganizationService.prototype.createOrganizationTree = (payload) => {
 
 };
 
-OrganizationService.prototype.getOrganizationTree = (queryParams)=> {
+OrganizationService.prototype.getOrganizationTree = async (queryParams)=> {
     const Op = Sequelize.Op;
     var offset = parseInt(queryParams.offset) || parseInt(pagination.offset);
     var limit = parseInt(queryParams.limit) || parseInt(pagination.limit);
